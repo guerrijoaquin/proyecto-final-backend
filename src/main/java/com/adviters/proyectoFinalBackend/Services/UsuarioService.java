@@ -1,7 +1,7 @@
 package com.adviters.proyectoFinalBackend.Services;
 
 import com.adviters.proyectoFinalBackend.Repositorys.UsuarioRepository;
-import com.adviters.proyectoFinalBackend.models.Users.Usuario;
+import com.adviters.proyectoFinalBackend.Models.Users.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

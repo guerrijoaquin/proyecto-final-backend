@@ -1,9 +1,10 @@
 package com.adviters.proyectoFinalBackend.Rest;
 
 import com.adviters.proyectoFinalBackend.Services.UsuarioService;
-import com.adviters.proyectoFinalBackend.models.Users.Usuario;
+import com.adviters.proyectoFinalBackend.Models.Users.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,10 @@ public class UsuarioREST {
     @Autowired
     private UsuarioService usuarioService;
 
-    @PostMapping
+    @PostMapping (
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     private ResponseEntity<Usuario> guardar (@RequestBody Usuario usuario){
         Usuario temporal = usuarioService.create(usuario);
 
