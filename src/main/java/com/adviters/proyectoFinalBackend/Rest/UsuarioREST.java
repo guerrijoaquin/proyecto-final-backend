@@ -2,6 +2,7 @@ package com.adviters.proyectoFinalBackend.Rest;
 
 import com.adviters.proyectoFinalBackend.Services.UsuarioService;
 import com.adviters.proyectoFinalBackend.Models.Users.Usuario;
+import org.hibernate.exception.spi.SQLExceptionConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping ("/v1/usuario")
+@RequestMapping ("api/usuario")
 public class UsuarioREST {
 
     @Autowired
@@ -27,13 +28,21 @@ public class UsuarioREST {
 
             if (usuario.getId() != null) throw new Exception();
 
-            Usuario temporal = usuarioService.createOrUpdate(usuario);
+            Usuario temporal = usuarioService.create(usuario);
 
             Map<String, Object> response = new HashMap<>();
             response.put("id", temporal.getId());
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
+
+            //CHECK IF ERROR IS FOR ALREADY USED EMAIL
+            if (e.getCause().getCause().getMessage().contains("Ya existe la llave (mail)")){
+                Map<String, Object> map = new HashMap<>();
+                map.put("message", "El email ya está en uso.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(map);
+            }
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
@@ -43,13 +52,20 @@ public class UsuarioREST {
     private ResponseEntity<Object> update (@RequestBody Usuario usuario){
 
         try {
-            Usuario temporal = usuarioService.createOrUpdate(usuario);
+            Usuario temporal = usuarioService.update(usuario);
 
             Map<String, Object> response = new HashMap<>();
             response.put("id", temporal.getId());
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
+            //CHECK IF ERROR IS FOR ALREADY USED EMAIL
+            if (e.getCause().getCause().getMessage().contains("Ya existe la llave (mail)")){
+                Map<String, Object> map = new HashMap<>();
+                map.put("message", "El email ya está en uso.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(map);
+            }
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }

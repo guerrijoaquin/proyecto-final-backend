@@ -5,11 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 
 import javax.persistence.*;
 import java.sql.Blob;
@@ -21,6 +25,7 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
+@AutoConfiguration
 
 public class Usuario {
 
@@ -28,16 +33,17 @@ public class Usuario {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
-    @NonNull
+    @Column (nullable = false)
     private String name;
-    @NonNull
+    @Column (nullable = false)
     private String lastname;
-    @NonNull
+    @Column (nullable = false)
     private String password;
     @NonNull
-    @Column (unique = true)
+    @NaturalId
+    @Column (unique = true, nullable = false)
     private String mail;
-    @NonNull
+    @Column (nullable = false)
     private Integer phone;
     @Nullable
     private String street;
@@ -55,18 +61,18 @@ public class Usuario {
     @Lob
     @Nullable
     private Blob Profile_picture;
-    @NonNull
+    @Column (nullable = false)
     private Integer Role_id;
-    @NonNull
+    @Column (nullable = false)
     private Date Birth_date;
     @NonNull
     @DateTimeFormat(pattern="dd/MM/yyyy")
     private Date Start_working_date;
-    @NonNull
+    @Column (nullable = false)
     private Integer Vacation_days;
-    @NonNull
+    @Column (nullable = false)
     private Integer Available_vacation_days;
-    @NonNull
+    @Column (nullable = false)
     private Integer Available_study_days;
     @Nullable
     private String supervisor;
@@ -82,5 +88,12 @@ public class Usuario {
     private Timestamp Updated_at;
     @Nullable
     private String Updated_by;
+
+    @Bean
+    public HibernateJpaSessionFactoryBean sessionFactory(EntityManagerFactory emf) {
+        HibernateJpaSessionFactoryBean fact = new HibernateJpaSessionFactoryBean();
+        fact.setEntityManagerFactory(emf);
+        return fact;
+    }
 
 }
