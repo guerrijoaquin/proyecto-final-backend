@@ -14,7 +14,8 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario create (Usuario usuario) {
+    //Create or update user
+    public Usuario createOrUpdate(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
@@ -27,7 +28,9 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> findById (String id) {
+
         return usuarioRepository.findById(id);
     }
+
 
 }

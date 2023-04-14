@@ -3,7 +3,10 @@ package com.adviters.proyectoFinalBackend.Models.Users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -32,6 +35,7 @@ public class Usuario {
     @NonNull
     private String password;
     @NonNull
+    @Column (unique = true)
     private String mail;
     @NonNull
     private Integer phone;
@@ -40,6 +44,7 @@ public class Usuario {
     @Nullable
     private Integer Street_number;
     @Nullable
+    @Column (nullable = false)
     private String tower;
     @Nullable
     private String town;
@@ -66,10 +71,14 @@ public class Usuario {
     @Nullable
     private String supervisor;
     @NonNull
+    @CreationTimestamp
+    @Column (updatable = false)
     private Timestamp Created_at;
     @NonNull
+    @Column (updatable = false)
     private String Created_by;
     @Nullable
+    @UpdateTimestamp
     private Timestamp Updated_at;
     @Nullable
     private String Updated_by;
