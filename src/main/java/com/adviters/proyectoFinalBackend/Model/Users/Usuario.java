@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -19,6 +20,8 @@ import javax.persistence.*;
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -27,7 +30,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @AutoConfiguration
-
 public class Usuario {
 
     @Id @GeneratedValue(generator="system-uuid")
@@ -40,7 +42,8 @@ public class Usuario {
     private String lastname;
     @Column (nullable = false)
     private String password;
-    @NonNull
+    private String oldPassword;
+    private Instant passwordLastUpdate = Instant.now();
     @Column (unique = true, nullable = false)
     private String mail;
     @Column (nullable = false)
@@ -65,7 +68,7 @@ public class Usuario {
     private Integer Role_id;
     @Column (nullable = false)
     private Date Birth_date;
-    @NonNull
+    @Column (nullable = false)
     @DateTimeFormat(pattern="dd/MM/yyyy")
     private Date Start_working_date;
     @Column (nullable = false)
@@ -76,11 +79,9 @@ public class Usuario {
     private Integer Available_study_days;
     @Nullable
     private String supervisor;
-    @NonNull
     @CreationTimestamp
     @Column (updatable = false)
     private Timestamp Created_at;
-    @NonNull
     @Column (updatable = false)
     private String Created_by;
     @Nullable
@@ -88,5 +89,18 @@ public class Usuario {
     private Timestamp Updated_at;
     @Nullable
     private String Updated_by;
+
+    @PrePersist
+    public void saveOldPassword(){
+        this.oldPassword = this.password;
+    }
+    @PreUpdate
+    public void checkPasswordChange(){
+        //CHECK IF PASSWORD WAS UPDATED. IN THAT CASE, UPDATE passwordLastUpdate field to invalidate generated JWTs.
+        if (!this.password.equals(this.oldPassword)) {
+            this.oldPassword = this.password;
+            this.passwordLastUpdate = Instant.now();
+        }
+    }
 
 }

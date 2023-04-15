@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 @AllArgsConstructor
 public class WebSecurityConfig {
 
@@ -22,11 +24,12 @@ public class WebSecurityConfig {
     private final JWTAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
-    SecurityFilterChain securityFilterChai(HttpSecurity http, AuthenticationManager authManager) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
 
         JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter();
         jwtAuthenticationFilter.setAuthenticationManager(authManager);
         jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth");
+
 
         return http
                 .csrf().disable() //Disable cross-side request forgery attacks
@@ -58,7 +61,7 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //Test encoding
+//    Test encoding
 //    public static void main(String[] args) {
 //        System.out.println("pass: " + new BCryptPasswordEncoder().encode("contraseña"));
 //    }

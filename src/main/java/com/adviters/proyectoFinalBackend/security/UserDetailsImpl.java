@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -19,6 +21,10 @@ public class UserDetailsImpl implements UserDetails {
 
     public Integer getRoleId(){
         return usuario.getRole_id();
+    }
+
+    public Instant getPasswordLastUpdate(){
+        return usuario.getPasswordLastUpdate();
     }
 
     @Override

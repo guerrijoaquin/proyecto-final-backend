@@ -1,21 +1,28 @@
 package com.adviters.proyectoFinalBackend.security;
 
+import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
+import com.adviters.proyectoFinalBackend.Repositorys.UsuarioRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import javax.security.auth.Subject;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class TokenUtils {
 
     private final static String JWT_SCRET = "lrucnskfh57s2g6v78j4t5sa5JFTBFKFID";
     private final static Long ACCESS_TOKEN_VALIDITY_SECONDS = 2_592_000L; //30 days
 
+    @Autowired
+    private static UsuarioRepository usuarioRepository;
 
 
     public static String createToken(String mail, String userId, Integer roleId) {
@@ -25,6 +32,7 @@ public class TokenUtils {
         Map<String, Object> extra = new HashMap<>();
         extra.put("mail", mail);
         extra.put("roleId", roleId);
+        extra.put("iat", Instant.now().toEpochMilli());
 
         return Jwts.builder() //Build JWT
                 .setSubject(userId)
@@ -36,14 +44,11 @@ public class TokenUtils {
 
     public static UsernamePasswordAuthenticationToken getAuthentication(String token){
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(JWT_SCRET.getBytes())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+            Claims claims = getTokenClaims(token);
             String mail = (String) claims.get("mail");
 
             return new UsernamePasswordAuthenticationToken(mail, null, Collections.emptyList());
+
         } catch (JwtException e) {
             return null;
         }
