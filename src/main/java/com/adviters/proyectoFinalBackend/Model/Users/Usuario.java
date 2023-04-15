@@ -3,10 +3,7 @@ package com.adviters.proyectoFinalBackend.Model.Users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +15,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -44,7 +43,8 @@ public class Usuario {
     @Column (nullable = false)
     private String password;
     private String oldPassword;
-    private Instant passwordLastUpdate = Instant.now();
+    @CreationTimestamp
+    private Instant passwordLastUpdate;
     @Column (unique = true, nullable = false)
     private String mail;
     @Column (nullable = false)
@@ -100,6 +100,7 @@ public class Usuario {
     public void checkPasswordChange(){
         //CHECK IF PASSWORD WAS UPDATED. IN THAT CASE, UPDATE passwordLastUpdate field to invalidate generated JWTs.
         if (!this.password.equals(this.oldPassword)) {
+            System.out.println("Password has changed!");
             this.password = new BCryptPasswordEncoder().encode(this.password);
             this.oldPassword = this.password;
             this.passwordLastUpdate = Instant.now();
