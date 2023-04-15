@@ -15,6 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.sql.Blob;
@@ -92,12 +93,14 @@ public class Usuario {
 
     @PrePersist
     public void saveOldPassword(){
+        this.password = new BCryptPasswordEncoder().encode(this.password);
         this.oldPassword = this.password;
     }
     @PreUpdate
     public void checkPasswordChange(){
         //CHECK IF PASSWORD WAS UPDATED. IN THAT CASE, UPDATE passwordLastUpdate field to invalidate generated JWTs.
         if (!this.password.equals(this.oldPassword)) {
+            this.password = new BCryptPasswordEncoder().encode(this.password);
             this.oldPassword = this.password;
             this.passwordLastUpdate = Instant.now();
         }
