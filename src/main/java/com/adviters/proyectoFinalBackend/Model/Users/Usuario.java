@@ -1,4 +1,4 @@
-package com.adviters.proyectoFinalBackend.Models.Users;
+package com.adviters.proyectoFinalBackend.Model.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +19,7 @@ import javax.persistence.*;
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table
@@ -40,7 +41,6 @@ public class Usuario {
     @Column (nullable = false)
     private String password;
     @NonNull
-    @NaturalId
     @Column (unique = true, nullable = false)
     private String mail;
     @Column (nullable = false)
@@ -88,12 +88,5 @@ public class Usuario {
     private Timestamp Updated_at;
     @Nullable
     private String Updated_by;
-
-    @Bean
-    public HibernateJpaSessionFactoryBean sessionFactory(EntityManagerFactory emf) {
-        HibernateJpaSessionFactoryBean fact = new HibernateJpaSessionFactoryBean();
-        fact.setEntityManagerFactory(emf);
-        return fact;
-    }
 
 }

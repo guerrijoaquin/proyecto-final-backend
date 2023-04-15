@@ -1,11 +1,10 @@
 package com.adviters.proyectoFinalBackend.Services;
 
 import com.adviters.proyectoFinalBackend.Repositorys.UsuarioRepository;
-import com.adviters.proyectoFinalBackend.Models.Users.Usuario;
+import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.*;
 
 @Service

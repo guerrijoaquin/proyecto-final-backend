@@ -1,25 +1,25 @@
-package com.adviters.proyectoFinalBackend.Rest;
+package com.adviters.proyectoFinalBackend.Controller;
 
 import com.adviters.proyectoFinalBackend.Services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityManagerFactory;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthREST {
+public class AuthController {
 
     @Autowired
     private AuthService authService;
 
     @PostMapping
-    private ResponseEntity<Object> login(Map<String, String> data){
+    private ResponseEntity<Object> login(@RequestBody Map<String, String> data){
 
         try {
 

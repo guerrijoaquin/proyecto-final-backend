@@ -1,8 +1,7 @@
-package com.adviters.proyectoFinalBackend.Rest;
+package com.adviters.proyectoFinalBackend.Controller;
 
 import com.adviters.proyectoFinalBackend.Services.UsuarioService;
-import com.adviters.proyectoFinalBackend.Models.Users.Usuario;
-import org.hibernate.exception.spi.SQLExceptionConverter;
+import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping ("api/usuario")
-public class UsuarioREST {
+public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
