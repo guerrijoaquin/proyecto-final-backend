@@ -1,24 +1,18 @@
 package com.adviters.proyectoFinalBackend.Model.Users;
 
-import com.adviters.proyectoFinalBackend.Repositorys.UsuarioRepository;
-import com.adviters.proyectoFinalBackend.security.UserDetailsImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.sql.Blob;
@@ -85,15 +79,23 @@ public class Usuario {
     private Integer Available_study_days;
     @Nullable
     private String supervisor;
+
+
+
+    //AUDIT DATA
     @CreationTimestamp
-    @Column (updatable = false)
+    @JsonIgnore
+    @Column (updatable = false, nullable = false)
     private Timestamp Created_at;
-    @Column (updatable = false)
+    @Column (updatable = false, nullable = false)
+    @JsonIgnore
     private String Created_by;
     @Nullable
+    @JsonIgnore
     @UpdateTimestamp
     private Timestamp Updated_at;
     @Nullable
+    @JsonIgnore
     private String Updated_by;
 
     @PrePersist
@@ -103,9 +105,9 @@ public class Usuario {
         HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
         String creatorId =  (String) authDetails.get("userId");
         this.setCreated_by(creatorId);
-        this.setUpdated_by(creatorId);
 
         //Encrypt and save the password
+        //BCrypt strong hashing function (SHA1)
         this.setPassword(new BCryptPasswordEncoder().encode(this.password));
         this.setOldPassword(this.password);
     }

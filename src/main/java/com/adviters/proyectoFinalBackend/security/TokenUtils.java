@@ -25,13 +25,12 @@ public class TokenUtils {
     private static UsuarioRepository usuarioRepository;
 
 
-    public static String createToken(String mail, String userId, Integer roleId) {
+    public static String createToken(String mail, String userId) {
         long expirationTime = ACCESS_TOKEN_VALIDITY_SECONDS * 1000;
         Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
 
         Map<String, Object> extra = new HashMap<>();
         extra.put("mail", mail);
-        extra.put("roleId", roleId);
         extra.put("iat", Instant.now().toEpochMilli());
 
         return Jwts.builder() //Build JWT

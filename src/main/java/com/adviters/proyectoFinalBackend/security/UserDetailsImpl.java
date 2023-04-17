@@ -19,9 +19,9 @@ public class UserDetailsImpl implements UserDetails {
         return usuario.getId();
     }
 
-    public Integer getRoleId(){
-        return usuario.getRole_id();
-    }
+//    public Integer getRoleId(){
+//        return usuario.getRole_id();
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
