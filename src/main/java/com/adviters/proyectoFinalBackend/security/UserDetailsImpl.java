@@ -23,10 +23,6 @@ public class UserDetailsImpl implements UserDetails {
         return usuario.getRole_id();
     }
 
-    public Instant getPasswordLastUpdate(){
-        return usuario.getPasswordLastUpdate();
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();

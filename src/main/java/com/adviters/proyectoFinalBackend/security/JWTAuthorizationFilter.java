@@ -5,6 +5,7 @@ import com.adviters.proyectoFinalBackend.Repositorys.UsuarioRepository;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Optional;
 
 @Component
@@ -47,7 +49,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
                 //CHECK IF USER PASSWORD WAS NOT UPDATED AFTER JWT GENERATION.
                 if (lastPasswordUpdate.isBefore(jwt_iat)) {
+
+                    HashMap<String, Object> authDetails = new HashMap<>();
+                    authDetails.put("userId", userId);
+
                     UsernamePasswordAuthenticationToken usernamePAT = TokenUtils.getAuthentication(token);
+                    usernamePAT.setDetails(authDetails);
                     SecurityContextHolder.getContext().setAuthentication(usernamePAT);
                 }
             }

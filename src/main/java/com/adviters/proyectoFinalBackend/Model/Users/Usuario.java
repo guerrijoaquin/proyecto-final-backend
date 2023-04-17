@@ -1,5 +1,7 @@
 package com.adviters.proyectoFinalBackend.Model.Users;
 
+import com.adviters.proyectoFinalBackend.Repositorys.UsuarioRepository;
+import com.adviters.proyectoFinalBackend.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
@@ -22,6 +26,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -92,18 +97,31 @@ public class Usuario {
     private String Updated_by;
 
     @PrePersist
-    public void saveOldPassword(){
-        this.password = new BCryptPasswordEncoder().encode(this.password);
-        this.oldPassword = this.password;
+    public void prePersist(){
+
+        //Configure audit data
+        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        String creatorId =  (String) authDetails.get("userId");
+        this.setCreated_by(creatorId);
+        this.setUpdated_by(creatorId);
+
+        //Encrypt and save the password
+        this.setPassword(new BCryptPasswordEncoder().encode(this.password));
+        this.setOldPassword(this.password);
     }
     @PreUpdate
-    public void checkPasswordChange(){
+    public void preUpdate(){
+
+        //Configure audit data
+        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        String updaterId =  (String) authDetails.get("userId");
+        this.setUpdated_by(updaterId);
+
         //CHECK IF PASSWORD WAS UPDATED. IN THAT CASE, UPDATE passwordLastUpdate field to invalidate generated JWTs.
         if (!this.password.equals(this.oldPassword)) {
-            System.out.println("Password has changed!");
-            this.password = new BCryptPasswordEncoder().encode(this.password);
-            this.oldPassword = this.password;
-            this.passwordLastUpdate = Instant.now();
+            this.setPassword(new BCryptPasswordEncoder().encode(this.password));
+            this.setOldPassword(this.password);
+            this.setPasswordLastUpdate(Instant.now());
         }
     }
 

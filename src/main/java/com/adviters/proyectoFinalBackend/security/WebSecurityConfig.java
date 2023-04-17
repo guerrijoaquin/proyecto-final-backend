@@ -30,7 +30,6 @@ public class WebSecurityConfig {
         jwtAuthenticationFilter.setAuthenticationManager(authManager);
         jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth");
 
-
         return http
                 .csrf().disable() //Disable cross-side request forgery attacks
                 .authorizeRequests()
@@ -62,8 +61,8 @@ public class WebSecurityConfig {
     }
 
 //    Test encoding
-    public static void main(String[] args) {
-        System.out.println("pass: " + new BCryptPasswordEncoder().encode("carlete"));
-    }
+//    public static void main(String[] args) {
+//        System.out.println("pass: " + new BCryptPasswordEncoder().encode("contraseña"));
+//    }
 
 }
