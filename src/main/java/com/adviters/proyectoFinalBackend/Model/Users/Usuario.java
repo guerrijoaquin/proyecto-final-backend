@@ -101,6 +101,7 @@ public class Usuario {
     @PrePersist
     public void prePersist(){
 
+
         //Configure audit data
         HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
         String creatorId =  (String) authDetails.get("userId");

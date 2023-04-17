@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.*;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 @AllArgsConstructor
 @NoArgsConstructor
 @AutoConfiguration
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id @GeneratedValue
     private String id;
@@ -62,4 +63,9 @@ public class Role {
         this.setUpdated_by(updaterId);
     }
 
+    @Override
+    @JsonIgnore
+    public String getAuthority() {
+        return this.role_name;
+    }
 }

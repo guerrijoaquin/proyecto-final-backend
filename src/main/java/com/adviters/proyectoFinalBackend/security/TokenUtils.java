@@ -1,5 +1,6 @@
 package com.adviters.proyectoFinalBackend.security;
 
+import com.adviters.proyectoFinalBackend.Model.Users.Role;
 import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
 import com.adviters.proyectoFinalBackend.Repositorys.UsuarioRepository;
 import io.jsonwebtoken.Claims;
@@ -41,12 +42,12 @@ public class TokenUtils {
                 .compact();
     }
 
-    public static UsernamePasswordAuthenticationToken getAuthentication(String token){
+    public static UsernamePasswordAuthenticationToken getAuthentication(String token, List<Role> roles){
         try {
             Claims claims = getTokenClaims(token);
             String mail = (String) claims.get("mail");
 
-            return new UsernamePasswordAuthenticationToken(mail, null, Collections.emptyList());
+            return new UsernamePasswordAuthenticationToken(mail, null, roles);
 
         } catch (JwtException e) {
             return null;

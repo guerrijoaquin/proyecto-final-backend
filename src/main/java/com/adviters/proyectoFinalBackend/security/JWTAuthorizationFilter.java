@@ -1,6 +1,8 @@
 package com.adviters.proyectoFinalBackend.security;
 
+import com.adviters.proyectoFinalBackend.Model.Users.Role;
 import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
+import com.adviters.proyectoFinalBackend.Repositorys.RoleRepository;
 import com.adviters.proyectoFinalBackend.Repositorys.UsuarioRepository;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +18,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -53,9 +55,20 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                     HashMap<String, Object> authDetails = new HashMap<>();
                     authDetails.put("userId", userId);
 
-                    UsernamePasswordAuthenticationToken usernamePAT = TokenUtils.getAuthentication(token);
-                    usernamePAT.setDetails(authDetails);
-                    SecurityContextHolder.getContext().setAuthentication(usernamePAT);
+                    Integer roleId = usuario.get().getRole_id();
+                    Optional<Role> role = roleRepository.findById(String.valueOf(roleId));
+                    if (role.isPresent()) {
+
+                        List<Role> roles = new ArrayList<>();
+                        roles.add(role.get());
+
+                        UsernamePasswordAuthenticationToken usernamePAT = TokenUtils.getAuthentication(token, roles);
+                        usernamePAT.setDetails(authDetails);
+                        SecurityContextHolder.getContext().setAuthentication(usernamePAT);
+
+                    }
+
+
                 }
             }
         }

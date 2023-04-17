@@ -40,4 +40,9 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
+    public boolean exists(String userId){
+        Optional<Usuario> optional = this.findById(userId);
+        return optional.isPresent();
+    }
+
 }
