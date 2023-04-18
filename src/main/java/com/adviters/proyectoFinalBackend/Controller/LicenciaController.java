@@ -1,6 +1,7 @@
 package com.adviters.proyectoFinalBackend.Controller;
 
 import com.adviters.proyectoFinalBackend.Model.Licencias.Licencia;
+import com.adviters.proyectoFinalBackend.Model.Licencias.TipoDeEstadoDeSolicitud;
 import com.adviters.proyectoFinalBackend.Model.Licencias.TipoDeLicencia;
 import com.adviters.proyectoFinalBackend.Model.Users.Role;
 import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
@@ -39,6 +40,13 @@ public class LicenciaController {
             //Check is licence has a valid format.
             if (!Validation.isValidLicence(licencia)) throw new Exception("El formato de la licencia es inválido.");
             licencia.setIdUser(idUser); //Set idUser on licence to be saved.
+
+            //Set default state to pending. Best practice is in columnDefinition but not works.¡?
+            TipoDeEstadoDeSolicitud tipoDeEstadoDeSolicitud = new TipoDeEstadoDeSolicitud();
+            tipoDeEstadoDeSolicitud.setId(0);
+            licencia.setTipoDeEstadoDeSolicitud(tipoDeEstadoDeSolicitud);
+
+
             Licencia licenciaGuardada = licenciaService.crearLicencia(licencia); //Save on DB.
             return ResponseEntity.ok(licenciaGuardada); //Send response.
 

@@ -32,7 +32,7 @@ public class Licencia {
 //    @Column (nullable = false)
 //    private Integer idLicenceType;
     @ManyToOne
-    @JoinColumn (name = "idLicenceType", referencedColumnName = "id")
+    @JoinColumn (name = "idLicenceType")
     private TipoDeLicencia tipoDeLicencia;
 
     @Column (nullable = false)
@@ -44,7 +44,7 @@ public class Licencia {
 //    @Column (nullable = false)
 //    private Integer status;
     @ManyToOne
-    @JoinColumn (name = "status", referencedColumnName = "id", columnDefinition = "default 0")
+    @JoinColumn (name = "status", referencedColumnName = "id" , columnDefinition = "int default 0")
     private TipoDeEstadoDeSolicitud tipoDeEstadoDeSolicitud;
 
     @Column (nullable = false)
@@ -76,11 +76,6 @@ public class Licencia {
         String creatorId =  (String) authDetails.get("userId");
         this.setCreated_by(creatorId);
 
-        HashMap<String, Object> map1 = new HashMap<>();
-        HashMap<String, Object> map2 = new HashMap<>();
-        map2.put("id", 0);
-        map1.put(map2);
-         this.setTipoDeEstadoDeSolicitud(new TipoDeEstadoDeSolicitud(0));
         //Set default values
 //        this.setStatus(0);
     }
