@@ -19,6 +19,7 @@ import java.sql.Blob;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +68,7 @@ public class Usuario {
     @Column (nullable = false)
     private Integer Role_id;
     @Column (nullable = false)
-    private Date Birth_date;
+    private LocalDate Birth_date;
     @Column (nullable = false)
     @DateTimeFormat(pattern="dd/MM/yyyy")
     private Date Start_working_date;
@@ -107,6 +108,9 @@ public class Usuario {
         String creatorId =  (String) authDetails.get("userId");
         this.setCreated_by(creatorId);
 
+        //Set supervisor id
+        this.setSupervisor(creatorId);
+
         //Encrypt and save the password
         //BCrypt strong hashing function (SHA1)
         this.setPassword(new BCryptPasswordEncoder().encode(this.password));
@@ -114,6 +118,7 @@ public class Usuario {
     }
     @PreUpdate
     public void preUpdate(){
+
 
         //Configure audit data
         HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();

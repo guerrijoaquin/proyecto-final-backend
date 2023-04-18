@@ -71,8 +71,8 @@ public class UsuarioController {
 
     //GET AN USER BY ID
     @GetMapping (value = "{id}")
-    private ResponseEntity<Optional<Usuario>> getUserById (@PathVariable ("id") String id){
-        return ResponseEntity.ok(usuarioService.findById(id));
+    private ResponseEntity<Usuario> getUserById (@PathVariable ("id") String id){
+        return ResponseEntity.ok(usuarioService.findById(id).get());
     }
 
     //DELETE AN USER
@@ -86,6 +86,16 @@ public class UsuarioController {
     @GetMapping
     private ResponseEntity<List<Usuario>> getAllUsers (){
         return ResponseEntity.ok(usuarioService.getAllUsers());
+    }
+
+    @GetMapping (path = "/supervisor")
+    private ResponseEntity<List<Map<String, Object>>> getAllSupervisors (){
+        return ResponseEntity.ok(usuarioService.getAllSupervisors());
+    }
+
+    @GetMapping (value = "/supervisor/{id}")
+    private ResponseEntity<List<Map<String, Object>>> getAllSupervisors (@PathVariable ("id") String id){
+        return ResponseEntity.ok(usuarioService.getAllUsersBySupervisor(id));
     }
 
 } 

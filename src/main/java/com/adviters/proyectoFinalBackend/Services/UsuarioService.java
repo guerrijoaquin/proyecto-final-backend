@@ -5,10 +5,16 @@ import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.*;
 
 @Service
 public class UsuarioService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -45,4 +51,38 @@ public class UsuarioService {
         return optional.isPresent();
     }
 
+    public List<Map<String, Object>> getAllSupervisors() {
+
+        List<Usuario> supervisors = usuarioRepository.getAllSupervisors();
+        List<Map<String,Object>> response = new ArrayList<>();
+
+        for (Usuario supervisor : supervisors){
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", supervisor.getId());
+            map.put("name", supervisor.getName());
+            map.put("last_name", supervisor.getLastname());
+            response.add(map);
+        }
+
+        return response;
+
+    }
+
+    public List<Map<String, Object>> getAllUsersBySupervisor(String id){
+
+        List<Usuario> usuarios = usuarioRepository.getAllUsersBySupervisor(id);
+        List<Map<String,Object>> response = new ArrayList<>();
+
+        for (Usuario usuario : usuarios){
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", usuario.getId());
+            map.put("name", usuario.getName());
+            map.put("last_name", usuario.getLastname());
+            map.put("profile_picture", usuario.getProfile_picture());
+            response.add(map);
+        }
+
+        return response;
+
+    }
 }

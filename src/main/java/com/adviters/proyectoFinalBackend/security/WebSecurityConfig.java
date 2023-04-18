@@ -4,6 +4,7 @@ import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,8 +34,10 @@ public class WebSecurityConfig {
         return http
                 .csrf().disable() //Disable cross-side request forgery attacks
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST,"/api/feriado").hasAuthority("Supervisor")
+                .antMatchers(HttpMethod.DELETE,"/api/feriado/**").hasAuthority("Supervisor")
                 .anyRequest()
-                .authenticated() //Protect all endpoints
+                .authenticated()
                 .and()
                 .httpBasic() //Allow basic auth (username & password)
                 .and()

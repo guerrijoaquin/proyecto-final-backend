@@ -5,6 +5,7 @@ import com.adviters.proyectoFinalBackend.Model.Licencias.TipoDeEstadoDeSolicitud
 import com.adviters.proyectoFinalBackend.Model.Licencias.TipoDeLicencia;
 import com.adviters.proyectoFinalBackend.Model.Users.Role;
 import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
+import com.adviters.proyectoFinalBackend.Services.FeriadoService;
 import com.adviters.proyectoFinalBackend.Services.LicenciaService;
 import com.adviters.proyectoFinalBackend.Services.RoleService;
 import com.adviters.proyectoFinalBackend.Services.UsuarioService;
@@ -30,6 +31,8 @@ public class LicenciaController {
     private LicenciaService licenciaService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private FeriadoService feriadoService;
 
     @PostMapping (value = "/user/{id}")
     private ResponseEntity<Object> crearLicencia(@RequestBody Licencia licencia, @PathVariable ("id") String idUser){
@@ -38,7 +41,7 @@ public class LicenciaController {
             //Check if user exists.
             if (!usuarioService.exists(idUser)) throw new Exception("El usuario no existe.");
             //Check is licence has a valid format.
-            if (!Validation.isValidLicence(licencia)) throw new Exception("El formato de la licencia es inválido.");
+            if (!Validation.isValidLicence(licencia, feriadoService.getAllHolidays())) throw new Exception("El formato de la licencia es inválido.");
             licencia.setIdUser(idUser); //Set idUser on licence to be saved.
 
             //Set default state to pending. Best practice is in columnDefinition but not works.¡?

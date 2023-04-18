@@ -1,4 +1,4 @@
-package com.adviters.proyectoFinalBackend.Model.Licencias;
+package com.adviters.proyectoFinalBackend.Model.Calendar;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.HashMap;
 
 @Entity
@@ -22,36 +21,17 @@ import java.util.HashMap;
 @AllArgsConstructor
 @NoArgsConstructor
 @AutoConfiguration
-public class Licencia {
+public class Feriado {
 
     @Id @GeneratedValue
     private Integer id;
 
     @Column (nullable = false)
-    private String idUser;
+    private String descripcion;
 
-//    @Column (nullable = false)
-//    private Integer idLicenceType;
-    @ManyToOne
-    @JoinColumn (name = "idLicenceType")
-    private TipoDeLicencia tipoDeLicencia;
+    @Column (nullable = false, unique = true)
+    private Date date;
 
-    @Column (nullable = false)
-    private LocalDate startDate;
-
-    @Column (nullable = false)
-    private LocalDate endDate;
-
-//    @Column (nullable = false)
-//    private Integer status;
-    @ManyToOne
-    @JoinColumn (name = "status", referencedColumnName = "id" , columnDefinition = "int default 0")
-    private TipoDeEstadoDeSolicitud tipoDeEstadoDeSolicitud;
-
-    @Column (nullable = false)
-    private Integer totalAvailableDays;
-
-    //ADD DOCUMENTATION FIELD
 
     //AUDIT DATA
     @CreationTimestamp
@@ -76,9 +56,6 @@ public class Licencia {
         HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
         String creatorId =  (String) authDetails.get("userId");
         this.setCreated_by(creatorId);
-
-        //Set default values
-//        this.setStatus(0);
     }
     @PreUpdate
     public void preUpdate(){
