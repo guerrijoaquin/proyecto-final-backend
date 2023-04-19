@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping ("api/usuario")
+@RequestMapping ("v1/usuario")
 public class UsuarioController {
 
     @Autowired

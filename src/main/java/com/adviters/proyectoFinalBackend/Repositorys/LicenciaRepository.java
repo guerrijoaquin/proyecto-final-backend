@@ -9,10 +9,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface LicenciaRepository extends JpaRepository<Licencia, String> {
+public interface LicenciaRepository extends JpaRepository<Licencia, Integer> {
 
+    @Query ("SELECT e FROM Licencia e WHERE e.idUser=(:id)")
+    List<Licencia> getLicencesByUser(@Param("id") String id);
 
-//    @Query("SELECT all FROM licencia WHERE idUser=:id ")
-//    public List<Licencia> getLicenciasDeUsuario(@Param("id") String id);
+    @Query ("SELECT e FROM Licencia e WHERE e.supervisor=(:id)")
+    List<Licencia> getLicencesByTeam(@Param("id") String id);
 
 }

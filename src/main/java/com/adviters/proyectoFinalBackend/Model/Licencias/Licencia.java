@@ -51,6 +51,9 @@ public class Licencia {
     @Column (nullable = false)
     private Integer totalAvailableDays;
 
+    @Column (nullable = false)
+    private String supervisor;
+
     //ADD DOCUMENTATION FIELD
 
     //AUDIT DATA

@@ -15,14 +15,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping ("api/role")
+@RequestMapping ("v1/role")
 public class RoleController {
 
     @Autowired
     private RoleService roleService;
 
     @GetMapping
-    private ResponseEntity<List<Role>> getAllUsers (){
+    private ResponseEntity<List<Role>> getAllRoles (){
         return ResponseEntity.ok(roleService.getAllRoles());
     }
 

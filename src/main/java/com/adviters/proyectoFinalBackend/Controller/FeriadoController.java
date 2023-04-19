@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping ("api/feriado")
+@RequestMapping ("v1/feriado")
 public class FeriadoController {
 
     @Autowired
