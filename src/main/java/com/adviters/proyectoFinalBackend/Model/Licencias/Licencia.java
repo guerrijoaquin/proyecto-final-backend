@@ -1,5 +1,6 @@
 package com.adviters.proyectoFinalBackend.Model.Licencias;
 
+import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,11 +28,10 @@ public class Licencia {
     @Id @GeneratedValue
     private Integer id;
 
-    @Column (nullable = false)
-    private String idUser;
+    @ManyToOne
+    @JoinColumn (name = "usuario", referencedColumnName = "id")
+    private Usuario usuario;
 
-//    @Column (nullable = false)
-//    private Integer idLicenceType;
     @ManyToOne
     @JoinColumn (name = "idLicenceType")
     private TipoDeLicencia tipoDeLicencia;
@@ -46,7 +46,7 @@ public class Licencia {
 //    private Integer status;
     @ManyToOne
     @JoinColumn (name = "status", referencedColumnName = "id" , columnDefinition = "int default 0")
-    private TipoDeEstadoDeSolicitud tipoDeEstadoDeSolicitud;
+    private TipoDeEstadoDeSolicitud status;
 
     @Column (nullable = false)
     private Integer totalAvailableDays;

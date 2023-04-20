@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface LicenciaRepository extends JpaRepository<Licencia, Integer> {
 
-    @Query ("SELECT e FROM Licencia e WHERE e.idUser=(:id)")
+    @Query ("SELECT e FROM Licencia e JOIN FETCH e.usuario userId WHERE userId.id=(:id)")
     List<Licencia> getLicencesByUser(@Param("id") String id);
 
     @Query ("SELECT e FROM Licencia e WHERE e.supervisor=(:id)")

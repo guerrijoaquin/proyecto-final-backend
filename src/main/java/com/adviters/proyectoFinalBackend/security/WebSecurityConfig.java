@@ -29,10 +29,11 @@ public class WebSecurityConfig {
 
         JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter();
         jwtAuthenticationFilter.setAuthenticationManager(authManager);
-        jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth");
+        jwtAuthenticationFilter.setFilterProcessesUrl("/v1/auth");
 
+        http.headers().frameOptions().disable();
         return http
-                .csrf().disable() //Disable cross-side request forgery attacks
+                .cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/api/feriado").hasAuthority("Supervisor")
                 .antMatchers(HttpMethod.DELETE,"/api/feriado/**").hasAuthority("Supervisor")

@@ -9,6 +9,7 @@ import com.adviters.proyectoFinalBackend.Services.FeriadoService;
 import com.adviters.proyectoFinalBackend.Services.LicenciaService;
 import com.adviters.proyectoFinalBackend.Services.RoleService;
 import com.adviters.proyectoFinalBackend.Services.UsuarioService;
+import com.adviters.proyectoFinalBackend.security.UserDetailsImpl;
 import com.adviters.proyectoFinalBackend.util.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,13 +47,15 @@ public class LicenciaController {
 
             //Check is licence has a valid format.
             if (!Validation.isValidLicence(licencia, feriadoService.getAllHolidays())) throw new Exception("El formato de la licencia es inválido.");
-            licencia.setIdUser(idUser); //Set idUser on licence to be saved.
+            Usuario usuario = new Usuario();
+            usuario.setId(idUser);
+            licencia.setUsuario(usuario); //Set idUser on licence to be saved.
             licencia.setSupervisor(optionalUsuario.get().getSupervisor());
 
             //Set default state to pending. Best practice is in columnDefinition but not works.¡?
             TipoDeEstadoDeSolicitud tipoDeEstadoDeSolicitud = new TipoDeEstadoDeSolicitud();
             tipoDeEstadoDeSolicitud.setId(0);
-            licencia.setTipoDeEstadoDeSolicitud(tipoDeEstadoDeSolicitud);
+            licencia.setStatus(tipoDeEstadoDeSolicitud);
 
 
             Licencia licenciaGuardada = licenciaService.crearLicencia(licencia); //Save on DB.
@@ -117,8 +120,22 @@ public class LicenciaController {
     }
 
     @GetMapping (value = "/list")
-    private ResponseEntity<List<Licencia>> getLicencesInDateRange(@RequestParam String inicio, @RequestParam String fin){
-        return ResponseEntity.ok(licenciaService.getLicencesInDateRange(inicio, fin));
+    private ResponseEntity<List<Licencia>> getLicencesWithConditions(
+            @RequestParam (required = false) String inicio,
+            @RequestParam (required = false) String fin,
+            @RequestParam (required = false) String status){
+
+        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        String supervisor =  (String) authDetails.get("userId");
+
+        if (inicio != null && fin != null)
+            return ResponseEntity.ok(licenciaService.getLicencesInDateRange(inicio, fin));
+
+        if (status != null && supervisor != null)
+            return ResponseEntity.ok(licenciaService.getLicencesByTeamAndStatus(Integer.valueOf(status), supervisor));
+
+        return ResponseEntity.badRequest().build();
+
     }
 
 } 

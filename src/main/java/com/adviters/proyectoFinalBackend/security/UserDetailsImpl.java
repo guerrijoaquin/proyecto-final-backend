@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.sql.Blob;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -60,5 +59,21 @@ public class UserDetailsImpl implements UserDetails {
 
     public String getName(){
         return usuario.getName();
+    }
+
+    public String getLastname(){
+        return usuario.getLastname();
+    }
+
+    public Integer getRoleId(){
+        return usuario.getRole_id();
+    }
+
+    public Blob getProfilePicture(){
+        return usuario.getProfile_picture();
+    }
+
+    public String getSupervisor(){
+        return usuario.getSupervisor();
     }
 }
