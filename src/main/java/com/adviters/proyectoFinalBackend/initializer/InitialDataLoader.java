@@ -41,11 +41,11 @@ public class InitialDataLoader {
         if (roleRepository.count() == 0) {
 
             Role role1 = new Role();
-            role1.setId("0");
+            role1.setId(0);
             role1.setRole_name("Supervisor");
 
             Role role2 = new Role();
-            role2.setId("0");
+            role2.setId(1);
             role2.setRole_name("Usuario");
 
             List<Role> roles = Arrays.asList(role1, role2);

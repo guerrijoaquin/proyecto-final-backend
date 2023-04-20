@@ -42,8 +42,6 @@ public class Licencia {
     @Column (nullable = false)
     private LocalDate endDate;
 
-//    @Column (nullable = false)
-//    private Integer status;
     @ManyToOne
     @JoinColumn (name = "status", referencedColumnName = "id" , columnDefinition = "int default 0")
     private TipoDeEstadoDeSolicitud status;
@@ -91,4 +89,6 @@ public class Licencia {
         String updaterId =  (String) authDetails.get("userId");
         this.setUpdated_by(updaterId);
     }
+
+
 }

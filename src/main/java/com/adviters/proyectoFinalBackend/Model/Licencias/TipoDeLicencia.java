@@ -51,16 +51,16 @@ public class TipoDeLicencia {
     public void prePersist(){
 
         //Configure audit data
-        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        String creatorId =  (String) authDetails.get("userId");
-        this.setCreated_by(creatorId);
+//        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
+//        String creatorId =  (String) authDetails.get("userId");
+        this.setCreated_by("ADMIN");
     }
     @PreUpdate
     public void preUpdate(){
 
         //Configure audit data
-        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        String updaterId =  (String) authDetails.get("userId");
-        this.setUpdated_by(updaterId);
+//        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
+//        String updaterId =  (String) authDetails.get("userId");
+        this.setUpdated_by("ADMIN");
     }
 }

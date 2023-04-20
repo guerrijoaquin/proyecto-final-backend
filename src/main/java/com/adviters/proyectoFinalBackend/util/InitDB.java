@@ -39,12 +39,12 @@ public class InitDB {
     }
     private void setRoles(){
         Role usuario = new Role();
-        usuario.setId("0");
+        usuario.setId(0);
         usuario.setRole_name("Usuario");
         roleRepository.save(usuario);
 
         Role supervisor = new Role();
-        supervisor.setId("1");
+        supervisor.setId(1);
         supervisor.setRole_name("Supervisor");
         roleRepository.save(supervisor);
     }

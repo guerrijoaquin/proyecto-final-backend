@@ -24,7 +24,7 @@ import java.util.HashMap;
 public class Role implements GrantedAuthority {
 
     @Id @GeneratedValue
-    private String id;
+    private Integer id;
 
     @Column (nullable = false, unique = true)
     private String role_name;
@@ -50,17 +50,17 @@ public class Role implements GrantedAuthority {
     public void prePersist(){
 
         //Configure audit data
-        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        String creatorId =  (String) authDetails.get("userId");
-        this.setCreated_by(creatorId);
+//        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
+//        String creatorId =  (String) authDetails.get("userId");
+        this.setCreated_by("ADMIN");
     }
     @PreUpdate
     public void preUpdate(){
 
         //Configure audit data
-        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        String updaterId =  (String) authDetails.get("userId");
-        this.setUpdated_by(updaterId);
+//        HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
+//        String updaterId =  (String) authDetails.get("userId");
+        this.setUpdated_by("ADMIN");
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.adviters.proyectoFinalBackend.Services;
 
+import com.adviters.proyectoFinalBackend.Repositorys.LicenciaRepository;
 import com.adviters.proyectoFinalBackend.Repositorys.UsuarioRepository;
 import com.adviters.proyectoFinalBackend.Model.Users.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -18,6 +20,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private LicenciaRepository licenciaRepository;
 
     //Create user
     public Usuario create(Usuario usuario) {
@@ -37,7 +42,12 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
+
+    @Transactional
     public void delete (Usuario usuario) {
+
+        licenciaRepository.deleteLicenciaByusuario(usuario);
+
         usuarioRepository.delete(usuario);
     }
 
@@ -74,6 +84,10 @@ public class UsuarioService {
         List<Map<String,Object>> response = new ArrayList<>();
 
         for (Usuario usuario : usuarios){
+
+            //Dont return the same user
+            if (usuario.getId().equals(id)) continue;
+
             Map<String, Object> map = new HashMap<>();
             map.put("id", usuario.getId());
             map.put("name", usuario.getName());

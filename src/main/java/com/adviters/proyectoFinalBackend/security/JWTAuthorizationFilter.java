@@ -56,7 +56,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                     authDetails.put("userId", userId);
 
                     Integer roleId = usuario.get().getRole_id();
-                    Optional<Role> role = roleRepository.findById(String.valueOf(roleId));
+                    Optional<Role> role = roleRepository.findById(roleId);
                     if (role.isPresent()) {
 
                         List<Role> roles = new ArrayList<>();
