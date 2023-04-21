@@ -14,7 +14,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
     Optional<Usuario> findOneByMail(String mail);
 
-    @Query("SELECT e FROM Usuario e WHERE e.Role_id=1")
+    @Query("SELECT e FROM Usuario e WHERE e.Role_id=0")
     List<Usuario> getAllSupervisors();
 
     @Query ("SELECT e FROM Usuario e WHERE e.supervisor=(:id)")

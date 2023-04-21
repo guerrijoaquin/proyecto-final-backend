@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 @Entity
@@ -26,11 +27,11 @@ public class Feriado {
     @Id @GeneratedValue
     private Integer id;
 
-    @Column (nullable = false)
+    @Column (nullable = false, unique = true)
     private String descripcion;
 
     @Column (nullable = false, unique = true)
-    private Date date;
+    private LocalDate date;
 
 
     //AUDIT DATA

@@ -23,6 +23,8 @@ public class UsuarioController {
     @PostMapping
     private ResponseEntity<Object> create (@RequestBody Usuario usuario){
 
+        System.out.println("se recibió: " + usuario);
+
         try {
 
             if (usuario.getId() != null) throw new Exception();
@@ -34,6 +36,8 @@ public class UsuarioController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
+
+            System.out.println(e.getMessage());
 
             //CHECK IF ERROR IS FOR ALREADY USED EMAIL
             if (e.getCause().getCause().getMessage().contains("Ya existe la llave (mail)")){

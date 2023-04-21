@@ -13,7 +13,7 @@ public class Validation {
         try {
             List<Date> holidays = new ArrayList<>();
             for (Feriado feriado : feriados){
-                holidays.add(feriado.getDate());
+                holidays.add(CalendarUtils.toDate(feriado.getDate()));
             }
 
             Date startDate = CalendarUtils.toDate(licencia.getStartDate());

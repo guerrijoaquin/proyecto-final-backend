@@ -44,6 +44,12 @@ public class FeriadoController {
                 map.put("message", "Ya existe un feriado en esa fecha.");
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(map);
             }
+            if (e.getCause().getCause().getMessage().contains("Ya existe la llave (descripcion)")){
+                Map<String, Object> map = new HashMap<>();
+                map.put("message", "Ya hay un feriado con ese nombre.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(map);
+            }
+
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

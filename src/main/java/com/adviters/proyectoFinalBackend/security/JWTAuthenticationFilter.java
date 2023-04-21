@@ -54,7 +54,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader("profilePicture", String.valueOf(userDetails.getProfilePicture()));
         response.addHeader("idUser", userDetails.getUserId());
         response.addHeader("supervisorId", userDetails.getSupervisor());
-        System.out.println(response.getHeader("Authorization"));
+        response.getWriter().flush();
         response.getWriter().flush();
 
         super.successfulAuthentication(request, response, chain, authResult);

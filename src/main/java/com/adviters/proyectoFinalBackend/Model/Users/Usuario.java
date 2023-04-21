@@ -56,7 +56,6 @@ public class Usuario {
     @Nullable
     private Integer Street_number;
     @Nullable
-    @Column(nullable = false)
     private String tower;
     @Nullable
     private String town;
@@ -74,12 +73,12 @@ public class Usuario {
     @Column(nullable = false)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date Start_working_date;
-    @Column(nullable = false)
-    private Integer Vacation_days;
-    @Column(nullable = false)
-    private Integer Available_vacation_days;
-    @Column(nullable = false)
-    private Integer Available_study_days;
+
+
+    private Integer vacation_days;
+    private Integer study_days;
+    private Integer available_vacation_days;
+    private Integer available_study_days;
     @Nullable
     private String supervisor;
 
@@ -106,14 +105,12 @@ public class Usuario {
     @PrePersist
     public void prePersist() {
 
-
         //Configure audit data
         HashMap<String, Object> authDetails = (HashMap<String, Object>) SecurityContextHolder.getContext().getAuthentication().getDetails();
         String creatorId = (String) authDetails.get("userId");
-        this.setCreated_by(creatorId);
+        this.setCreated_by("ADMIN");
 
-        //Set supervisor id
-        this.setSupervisor(creatorId);
+        if (this.supervisor == null) this.setSupervisor(creatorId);
 
         //Encrypt and save the password
         //BCrypt strong hashing function (SHA1)
